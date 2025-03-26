@@ -3,25 +3,39 @@ import pgeocode
 import matplotlib.pyplot as plt
 print('This is test.py')
 Country = pgeocode.Nominatim('us')
+HousePrice = []
+HouseFloorNumber = []
+HouseFloorAppearance = []
+AvgHousePrice = []
+AvgPricePerFloor = []
 Longitude = []
 Latitude = []
-Colour=[]
-Ziplist=[]
-Pricelist=[]
-Appearancelist=[]
-AvgPricelist=[]
+Colour = []
+Ziplist = []
+Pricelist = []
+Appearancelist = []
+AvgPricelist = []
 with open('USA Housing Dataset.csv', 'r') as f:
     #initialising csv reader
     csv_reader = csv.reader(f)
     next(csv_reader)
     for row in csv_reader:
+        #checking if a house is waterfront or not then adding it to a relevant integer and adding a 1 to the house number to be able ot calcualte average
+        if row[6] in HouseFloorNumber:
+            Location = HouseFloorNumber.index(row[6])
+            HousePrice[Location] = float(HousePrice[Location]) + Price
+            HouseFloorAppearance[Location] += 1
+        else:
+            HousePrice.append(row[1])
+            HouseFloorNumber.append(row[6])
+            HouseFloorAppearance.append(1)
         FullZip = row[16]
         Price = float(row[1])
         #removing first 3 letters of the state zipcode
         Zip = FullZip[3:]
         if Zip in Ziplist:
             #getting location of zipcode in list and adding new price+appearance onto the same index in the releveant lists
-            Location= Ziplist.index(Zip)
+            Location = Ziplist.index(Zip)
             Appearancelist[Location] = int(Appearancelist[Location])+1
             Pricelist[Location] = int(Pricelist[Location])+Price
         else:
@@ -33,12 +47,18 @@ with open('USA Housing Dataset.csv', 'r') as f:
             Longitude.append(Coordinates['longitude'])
             Latitude.append(Coordinates['latitude'])
 print(Appearancelist)
+#dividing Prices with amount of houses
+print(HouseFloorNumber)
 i=0
-#dividing all items in Price list with Apperance list to get the average house price
+for item in HousePrice:
+    AvgHousePrice.append(HousePrice[i]/HouseFloorAppearance[i])
+    AvgPricePerFloor.append(HousePrice[i]/float(HouseFloorNumber[i]))
+    i += 1
+i=0
+#dividing all items in Price list with Apperance list to get the average house price for each zipcode
 for item in Appearancelist:
     AvgPricelist.append(Pricelist[i]/Appearancelist[i])
-    i=i+1
-print(AvgPricelist)
+    i += 1
 #sorting average house price into 200k ranges and assigning it a colour on the graph 
 i=0
 for item in AvgPricelist:
@@ -64,8 +84,13 @@ for item in AvgPricelist:
         Colour.append('cyan')
     else:
         Colour.append('black')
-    i=i+1
+    i += 1
 x = Longitude
 y = Latitude
+print(AvgHousePrice)
+print(AvgPricePerFloor)
+print(HouseFloorAppearance)
+plt.bar (range(len(HouseFloorNumber)), AvgPricePerFloor)
+plt.show()
 plt.scatter(x,y, c=Colour)
 plt.show()
