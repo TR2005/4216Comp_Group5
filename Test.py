@@ -1,24 +1,9 @@
 import csv
 import pgeocode
 import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
 print('This is test.py')
-#Defining menu function for callback on incorrect input
-def Menu():
-    print(f"Please input whos part of the project you wish to run\n1.Reece\n2.Tomos\n3.Oliver\n4.Sam")
-    Selection = input()
-    if Selection == 1:
-        Reece()
-    elif Selection == 2:
-        Tomos()
-    elif Selection == 3:
-        Oliver()
-    elif Selection == 4:
-        Sam()
-    else:
-        print("incorrect input please try again")
-        Menu()
-#Executing menu code block
-Menu()
+
 
 #Defining a function to be execute Code made by Tomos for simplicity of Menu function
 def Tomos():
@@ -116,6 +101,7 @@ def Tomos():
         i += 1
     x = Longitude
     y = Latitude
+    Image1 = mpimg.imread('WashingtonState.jpg')
     # Making bar graph for Average floor price
     plt.bar (HouseFloorNumber, AvgPricePerFloor)
     plt.xlabel("Amount of floors")
@@ -124,7 +110,32 @@ def Tomos():
     plt.show()
     # Making scatter graph to show location and colour price of different zipcodes
     plt.scatter(x,y, c=Colour)
-    plt.xlabel("Latitude")
-    plt.ylabel("Longitude")
+    plt.xlabel("Longitude")
+    plt.ylabel("Latitude")
+    plt.imshow(Image1, extent=[min(Longitude), max(Longitude), min(Latitude), max(Latitude)])
     plt.show()
+    print(min(Longitude), max(Longitude), min(Latitude), max(Latitude))
     Menu()
+    #Defining menu function for callback on incorrect input
+def Menu():
+    i=0
+    Selection = ""
+    while i == 0:
+        print(f"Please input whos part of the project you wish to run\n1.Reece\n2.Tomos\n3.Oliver\n4.Sam")
+        Selection = input()
+        if Selection == "1":
+            i=1
+            Reece()
+        elif Selection == "2":
+            i=1
+            Tomos()
+        elif Selection == "3":
+            i=1
+            Oliver()
+        elif Selection == "4":
+            i=1
+            Sam()
+        else:
+            print("incorrect input please try again")
+#Executing menu code block
+Menu()
