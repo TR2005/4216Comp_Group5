@@ -1,4 +1,6 @@
 import csv
+import matplotlib.pyplot as plt 
+import pandas as pd 
 def option_print_dataset():
     print("You selected Print Dataset.")
     #runs through the dataset and prints it
@@ -19,7 +21,26 @@ def option_tomos():
     # place your visualisation code here please. @TR2005
 def option_reece():
     print("you selected user: Reece")
-    #
+    housing_prices = pd.read_csv("USA Housing Dataset.csv")
+    #only getting the rows which have renovations 
+    unsorted_renovated_true = housing_prices[housing_prices["yr_renovated"]>0]
+    #sorting and removing dupes on the rows needed for the visualisation
+    renovated_true_sorted = unsorted_renovated_true.sort_values(by="yr_renovated")
+    renovated_true_nodupe = renovated_true_sorted.drop_duplicates("yr_renovated")
+    #turning the sorted tables into individual lists with the needed rows for plotting 
+    row_renovated_bef1970_price = renovated_true_nodupe["price"]
+    row_renovated_bef1970 = renovated_true_nodupe["yr_renovated"]
+    
+    #plotting the first visualisation 
+    fig, ax = plt.subplots()
+    fig.suptitle("Price to year renovated", fontsize=16)
+    ax.set_xlabel("Year renovated", fontsize=12)
+    ax.set_ylabel("Price (Millions)", fontsize=12)
+    ax.plot(row_renovated_bef1970, row_renovated_bef1970_price)
+    ax.grid(True)
+    plt.show()
+
+
 def option_oliver():
     print("you selected user: Oliver")
     # place your visualisation code here please. @oliver9362
