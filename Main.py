@@ -14,8 +14,26 @@ def option_print_dataset():
 def option_visualisations():
     print("You selected Visualisations.")
     user_selection()
-def option_facts():
-    print("You selected facts.")
+def option_questions():
+    print("You selected questions\n Please enter a user")
+    while True: 
+        print(f" === Select a user. === \n1. Tomos\n2. Reece\n3. Oliver\n4. Sam\n5. Return to main  menu\n================\nEnter your choice (1-5): ")
+        choice = input()
+        if choice == "1": 
+            print(f"")
+        elif choice == "2":
+          print(f"")
+        elif choice == "3":
+            print(f"")
+        elif choice == "4":
+            print(f"")
+        elif choice == "5":
+            main()
+        else:
+            print("Invalid choice, please choose a number between 1 and 5.")
+
+
+
 def option_tomos():
     print("you selected user: Tomos")
     # place your visualisation code here please. @TR2005
@@ -50,14 +68,14 @@ def option_sam():
 def main():
     while True:
         #main menu to be showed whenever the program opens 
-        print(f"=== Main Menu ===\n1. Print Dataset\n2. Visualisations\n3. Facts\n4. Exit\n=================\nEnter your choice (1-4): ")
+        print(f"=== Main Menu ===\n1. Print Dataset\n2. Visualisations\n3. Questions\n4. Exit\n=================\nEnter your choice (1-4): ")
         choice = input()
         if choice == "1":
             option_print_dataset()
         elif choice == "2":
             option_visualisations()
         elif choice == "3":
-            option_facts()
+            option_questions()
         elif choice == "4":
             print("Exiting the program...")
             break
