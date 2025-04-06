@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 import pandas as pd 
 import matplotlib.patches as mpatches
 
-#Read dataset and store it in variable "data"
-data = pd.read_csv("USA Housing Dataset.csv")
+def load_dataset():
+    return pd.read_csv("USA Housing Dataset.csv")
 
 def option_print_dataset():
     print("You selected Print Dataset.")
@@ -43,9 +43,10 @@ def option_tomos():
     print("you selected user: Tomos")
     # place your visualisation code here please. @TR2005
 def option_reece():
+    housing_prices = load_dataset()
     print("you selected user: Reece")
     #only getting the rows which have renovations 
-    unsorted_renovated_true = data[data["yr_renovated"]>0]
+    unsorted_renovated_true = housing_prices[housing_prices["yr_renovated"]>0]
     #sorting and removing dupes on the rows needed for the visualisation
     renovated_true_sorted = unsorted_renovated_true.sort_values(by="yr_renovated")
     renovated_true_nodupe = renovated_true_sorted.drop_duplicates("yr_renovated")
@@ -72,6 +73,7 @@ def bar_colour(price):
         return "red"
 
 def option_oliver():
+    data = load_dataset()
     print("you selected user: Oliver")
     
     #Group dataset by city
@@ -108,6 +110,30 @@ def option_oliver():
     #Show the graph
     plt.show()
 
+    #Convert date column to correct format
+    data["date"] = pd.to_datetime(data["date"])
+
+    #Sort the dataset by date
+    data = data.sort_values(by = "date")
+
+    #Group the data by day and calculate average price
+    data_grouped = data.groupby(data["date"].dt.date)["price"].mean()
+
+    #Create the plot
+    fig, ax = plt.subplots(figsize=(12, 6))
+    ax.plot(data_grouped.index, data_grouped)
+
+    #Labels and title
+    ax.set_xlabel("Date")
+    ax.set_ylabel("Price ($)")
+    ax.set_title("House Price Trends Over Time")
+
+    #Stop the graph using scientific notation
+    plt.ticklabel_format(style = 'plain', axis = "y")
+
+    #Show the graph
+    plt.grid(True)
+    plt.show()
 
 def option_sam():
     print("you selected user: Sam")
