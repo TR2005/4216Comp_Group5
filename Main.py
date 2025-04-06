@@ -37,8 +37,6 @@ def option_questions():
         else:
             print("Invalid choice, please choose a number between 1 and 5.")
 
-
-
 def option_tomos():
     print("you selected user: Tomos")
     # place your visualisation code here please. @TR2005
@@ -71,8 +69,8 @@ def bar_colour(price):
         return "orange"
     else:
         return "red"
-
-def option_oliver():
+    
+def oliver_visualisation1():
     data = load_dataset()
     print("you selected user: Oliver")
     
@@ -110,6 +108,8 @@ def option_oliver():
     #Show the graph
     plt.show()
 
+def oliver_visualisation2():
+    data = load_dataset()
     #Convert date column to correct format
     data["date"] = pd.to_datetime(data["date"])
 
@@ -134,6 +134,22 @@ def option_oliver():
     #Show the graph
     plt.grid(True)
     plt.show()
+
+def option_oliver():
+    print("You selected user: Oliver")
+    while True:
+        print(f"=== Oliver's Visualisations ===\n1. City Price Comparison\n2. Prices Over Time\n3. Return to previous menu")
+        choice = input()
+
+        if choice == "1":
+            oliver_visualisation1()
+        elif choice == "2":
+            oliver_visualisation2
+        elif choice == "3":
+            print("Exiting the program...")
+            break
+        else:
+            print("Invalid choice, please choose a number between 1 and 3.")
 
 def option_sam():
     print("you selected user: Sam")
@@ -171,4 +187,3 @@ def user_selection():
         else:
             print("Invalid choice, please choose a number between 1 and 5.")
 main()
-    
