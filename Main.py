@@ -113,27 +113,68 @@ def oliver_visualisation2():
     #Convert date column to correct format
     data["date"] = pd.to_datetime(data["date"])
 
-    #Sort the dataset by date
-    data = data.sort_values(by = "date")
+    while True:
+        print(f" === House Price Trend Options === \n1. View overall house price change over time\n2. Compare house prices over time between 2 ZIP codes\n3. Return to previous menu")
+        choice = input()
 
-    #Group the data by day and calculate average price
-    data_grouped = data.groupby(data["date"].dt.date)["price"].mean()
+        if choice == "1":
+            #Sort the dataset by date
+            data = data.sort_values(by = "date")
 
-    #Create the plot
-    fig, ax = plt.subplots(figsize=(12, 6))
-    ax.plot(data_grouped.index, data_grouped)
+            #Group the data by day and calculate average price
+            data_grouped = data.groupby(data["date"].dt.date)["price"].mean()
 
-    #Labels and title
-    ax.set_xlabel("Date")
-    ax.set_ylabel("Price ($)")
-    ax.set_title("House Price Trends Over Time")
+            #Create the plot
+            fig, ax = plt.subplots(figsize=(12, 6))
+            ax.plot(data_grouped.index, data_grouped)
 
-    #Stop the graph using scientific notation
-    plt.ticklabel_format(style = 'plain', axis = "y")
+             #Labels and title
+            ax.set_xlabel("Date")
+            ax.set_ylabel("Average Price ($)")
+            ax.set_title("House Price Trends Over Time")
 
-    #Show the graph
-    plt.grid(True)
-    plt.show()
+            #Stop the graph using scientific notation
+            plt.ticklabel_format(style = 'plain', axis = "y")
+
+            #Show the graph
+            plt.grid(True)
+            plt.show()
+
+        elif choice == "2":
+            zip1 = input("Enter the first ZIP code: ")
+            zip2 = input("Enter the second ZIP code: ")
+
+            #Filters the dataset to only have the right statezip in the variables
+            zip1_data = data[data["statezip"] == zip1]
+            zip2_data = data[data["statezip"] == zip2]
+
+            #Groups the data by date to get an average price for each zip
+            zip1_grouped = zip1_data.groupby(zip1_data["date"].dt.date)["price"].mean()
+            zip2_grouped = zip2_data.groupby(zip2_data["date"].dt.date)["price"].mean()
+
+             #Create the plots
+            fig, ax = plt.subplots(figsize=(12, 6))
+            ax.plot(zip1_grouped.index, zip1_grouped, label=zip1)
+            ax.plot(zip2_grouped.index, zip2_grouped, label=zip2)
+
+             #Labels and title
+            ax.set_xlabel("Date")
+            ax.set_ylabel("Average Price ($)")
+            ax.set_title("House Price Trends Over Time: " +zip1+ " vs " +zip2)
+            ax.legend()
+
+            #Stop the graph using scientific notation
+            plt.ticklabel_format(style = 'plain', axis = "y")
+
+            #Show the graph
+            plt.grid(True)
+            plt.show()
+
+        elif choice == "3":
+            break
+
+        else:
+            print("Invalid choice, please choose a number between 1 and 3")
 
 def option_oliver():
     print("You selected user: Oliver")
@@ -144,9 +185,9 @@ def option_oliver():
         if choice == "1":
             oliver_visualisation1()
         elif choice == "2":
-            oliver_visualisation2
+            oliver_visualisation2()
         elif choice == "3":
-            print("Exiting the program...")
+            print("Returning to previous menu.")
             break
         else:
             print("Invalid choice, please choose a number between 1 and 3.")
