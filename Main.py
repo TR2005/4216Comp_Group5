@@ -16,9 +16,11 @@ def option_print_dataset():
         next(csv_reader)
         for row in csv_reader:
             print(row)
+
 def option_visualisations():
     print("You selected Visualisations.")
     user_selection()
+
 def option_questions():
     print("You selected questions\n Please enter a user")
     while True: 
@@ -33,13 +35,14 @@ def option_questions():
         elif choice == "4":
             print(f"")
         elif choice == "5":
-            main()
+            return
         else:
             print("Invalid choice, please choose a number between 1 and 5.")
 
 def option_tomos():
     print("you selected user: Tomos")
     # place your visualisation code here please. @TR2005
+
 def option_reece():
     housing_prices = load_dataset()
     print("you selected user: Reece")
@@ -81,12 +84,12 @@ def oliver_visualisation1():
     colours = [bar_colour(p) for p in data_grouped]
 
     #Create the plot
-    fig, ax = plt.subplots(figsize = (12, 6))
+    fig, ax = plt.subplots(figsize = (13, 6))
     ax.bar(data_grouped.index, data_grouped, color = colours)
        
     green_patch = mpatches.Patch(color="green", label="Affordable Place To Live (average under $300000)")
-    orange_patch = mpatches.Patch(color="orange", label="Average Cost Place To Live(average between $300000 and $800000")
-    red_patch = mpatches.Patch(color="red", label="Expensive Place To Live(Over $800000)")
+    orange_patch = mpatches.Patch(color="orange", label="Average Cost Place To Live (average between \$300000 and \$800000")
+    red_patch = mpatches.Patch(color="red", label="Expensive Place To Live (Average over $800000)")
 
     ax.legend(handles=[green_patch, orange_patch,red_patch])
 
@@ -195,6 +198,7 @@ def option_oliver():
 def option_sam():
     print("you selected user: Sam")
     #place your visualisations code here sam
+
 def main():
     while True:
         #main menu to be showed whenever the program opens 
@@ -211,6 +215,7 @@ def main():
             break
         else:
             print("Invalid choice, please choose a number between 1 and 4.")
+
 def user_selection():
      while True: 
         print(f" === Select a user. === \n1. Tomos\n2. Reece\n3. Oliver\n4. Sam\n5. Return to main  menu\n================\nEnter your choice (1-5): ")
@@ -224,7 +229,7 @@ def user_selection():
         elif choice == "4":
             option_sam()
         elif choice == "5":
-            main()
+            return
         else:
             print("Invalid choice, please choose a number between 1 and 5.")
 main()
