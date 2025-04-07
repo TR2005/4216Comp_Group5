@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import pandas as pd 
 import matplotlib.patches as mpatches
 
+#Function to read the dataset so each visualisation can call it and assign it to a variable
 def load_dataset():
     return pd.read_csv("USA Housing Dataset.csv")
 
@@ -31,7 +32,7 @@ def option_questions():
         elif choice == "2":
           print(f"")
         elif choice == "3":
-            print(f"")
+            print(f"1. Comparing house prices between different cities\n2. Comparing house prices over time.")
         elif choice == "4":
             print(f"")
         elif choice == "5":
@@ -87,8 +88,10 @@ def oliver_visualisation1():
     fig, ax = plt.subplots(figsize = (13, 6))
     ax.bar(data_grouped.index, data_grouped, color = colours)
        
+    #Create different legend patches for the different prices
     green_patch = mpatches.Patch(color="green", label="Affordable Place To Live (average under $300000)")
-    orange_patch = mpatches.Patch(color="orange", label="Average Cost Place To Live (average between \$300000 and \$800000")
+    #r means the label is a raw string so no syntax error for escape character
+    orange_patch = mpatches.Patch(color="orange", label=r"Average Cost Place To Live (average between \$300000 and \$800000)")
     red_patch = mpatches.Patch(color="red", label="Expensive Place To Live (Average over $800000)")
 
     ax.legend(handles=[green_patch, orange_patch,red_patch])
