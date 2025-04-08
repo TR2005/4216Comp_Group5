@@ -2,6 +2,7 @@ import csv
 import pgeocode
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
+import matplotlib.patches as mpatches
 print('This is test.py')
 #defining variables and arrays
 Country = pgeocode.Nominatim('us')
@@ -95,7 +96,17 @@ for item in AvgPricelist:
     else:
         Colour.append('black')
     i += 1
-x = Longitude
+green = mpatches.Patch(color='green', label='<200k')
+red = mpatches.Patch(color='red', label='200k-400k')
+blue = mpatches.Patch(color='blue', label='400k-600k')
+purple= mpatches.Patch(color='purple', label='600k-800k')
+pink= mpatches.Patch(color='pink', label='800k-1000k')
+orange= mpatches.Patch(color='orange', label='1000k-1200k')
+brown= mpatches.Patch(color='brown', label='1200k-1400k')
+gray= mpatches.Patch(color='gray', label='1400k-1600k')
+olive= mpatches.Patch(color='olive', label='1600k-1800k')
+cyan= mpatches.Patch(color='cyan', label='1800k-2000k')
+black= mpatches.Patch(color='black', label='2000k+')
 # Making bar graph for Average floor price
 plt.bar (HouseFloorNumber, AvgPricePerFloor)
 plt.xlabel("Amount of floors")
@@ -118,6 +129,7 @@ plt.imshow(Image1, extent=[ImageAreaXMin, ImageAreaXMax, ImageAreaYMin, ImageAre
 plt.scatter(x,y, c=Colour)
 plt.xlabel("Longitude")
 plt.ylabel("Latitude")
+plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.2), ncol=4, handles=[green, red, blue, purple, pink, orange, brown, gray, olive, cyan, black])
 plt.show()
 print(min(Longitude), max(Longitude), min(Latitude), max(Latitude))
 print(ImageAreaYMin, ImageAreaXMin, ImageAreaYMax, ImageAreaXMax)
