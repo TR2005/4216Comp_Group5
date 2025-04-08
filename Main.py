@@ -1,14 +1,10 @@
 import csv
-<<<<<<< HEAD
 import pgeocode
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import matplotlib.patches as mpatches
-print('This is main.py')
-
-=======
-import matplotlib.pyplot as plt 
 import pandas as pd 
+print('This is main.py')
 def option_print_dataset():
     print("You selected Print Dataset.")
     #runs through the dataset and prints it
@@ -100,12 +96,8 @@ def option_tomos():
         AvgHousePrice.append(HousePrice[i]/HouseFloorAppearance[i])
         AvgPricePerFloor.append(AvgHousePrice[i]/float(HouseFloorNumber[i]))
         i += 1
-    print(HouseFloorNumber)
-    print(AvgPricePerFloor)
     #sorting floor numbers while also keeping the price in the same location as the floor number
     HouseFloorNumber, AvgPricePerFloor = zip(*sorted(zip(HouseFloorNumber, AvgPricePerFloor)))
-    print(HouseFloorNumber)
-    print(AvgPricePerFloor)
     i=0
     #dividing all items in Price list with Apperance list to get the average house price for each zipcode
     for item in Appearancelist:
@@ -172,8 +164,6 @@ def option_tomos():
     plt.ylabel("Latitude")
     plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.2), ncol=4, handles=[green, red, blue, purple, pink, orange, brown, gray, olive, cyan, black])
     plt.show()
-    print(min(Longitude), max(Longitude), min(Latitude), max(Latitude))
-    print(ImageAreaYMin, ImageAreaXMin, ImageAreaYMax, ImageAreaXMax)
 def option_reece():
     print("you selected user: Reece")
     housing_prices = pd.read_csv("USA Housing Dataset.csv")
@@ -263,5 +253,3 @@ def user_selection():
         else:
             print("Invalid choice, please choose a number between 1 and 5.")
 main()
-    
->>>>>>> origin/main
