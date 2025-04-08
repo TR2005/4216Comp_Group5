@@ -20,13 +20,13 @@ def option_questions():
         print(f" === Select a user. === \n1. Tomos\n2. Reece\n3. Oliver\n4. Sam\n5. Return to main  menu\n================\nEnter your choice (1-5): ")
         choice = input()
         if choice == "1": 
-            print(f"")
+            print(f"-Using Pgeocode to convert zipcode to lattitude longitude and using average house prices for said post code to generate a map with different coloured dots to display where houses are most expensive (using column B and Q)\n -Comparing the price differences in the houses that are waterfront with those that arent")
         elif choice == "2":
-          print(f"")
+          print(f"-Comparison between the price of a house and whether its renovated/what date it was renovated \n-how the ammount of bathrooms affects the price of the house and what the average price of 1 bathroom is")
         elif choice == "3":
-            print(f"")
+            print(f"-comparison between the condition of the house and what year it was built and wether it needed renevating or not and how that corrilates to the condition.\n-comparioson between the total sqft and how that corrilates to the number of rooms and the price of the property.")
         elif choice == "4":
-            print(f"")
+            print(f"-Comparing house prices over time\n-Comparing house prices between different cities")
         elif choice == "5":
             main()
         else:
@@ -40,21 +40,49 @@ def option_tomos():
 def option_reece():
     print("you selected user: Reece")
     housing_prices = pd.read_csv("USA Housing Dataset.csv")
-    #only getting the rows which have renovations 
-    unsorted_renovated_true = housing_prices[housing_prices["yr_renovated"]>0]
-    #sorting and removing dupes on the rows needed for the visualisation
-    renovated_true_sorted = unsorted_renovated_true.sort_values(by="yr_renovated")
-    renovated_true_nodupe = renovated_true_sorted.drop_duplicates("yr_renovated")
-    #turning the sorted tables into individual lists with the needed rows for plotting 
-    row_renovated_bef1970_price = renovated_true_nodupe["price"]
-    row_renovated_bef1970 = renovated_true_nodupe["yr_renovated"]
-    
+    housing_prices_df = pd.DataFrame(housing_prices)
+    #determine duplicates and also their respective averages 
+    bath_duplicates = housing_prices_df['bathrooms'][housing_prices_df['bathrooms'].duplicated(keep=False)]
+    duplicates = housing_prices_df['yr_renovated'][housing_prices_df['yr_renovated'].duplicated(keep=False)]
+    bath_avg_prices = housing_prices_df[housing_prices_df['bathrooms'].isin(bath_duplicates)].groupby('bathrooms')['price'].mean()
+    avg_prices = housing_prices_df[housing_prices_df['yr_renovated'].isin(duplicates)].groupby('yr_renovated')['price'].mean()
+    #define both methods of replacing the duplicated rows
+    def replace_with_avg_price(product, price):
+        if product in avg_prices:
+            return avg_prices[product]
+        else:
+            return price 
+    def replace_with_bath_avg_price(product, price):
+        if product in bath_avg_prices:
+            return bath_avg_prices[product]
+        else:
+            return price
+    #using the previous functions to put the averages back into the correct rows and then getting the needed data out of the datafrane
+    housing_prices_df['price'] = housing_prices_df.apply(lambda row: replace_with_avg_price(row['yr_renovated'], row['price']), axis=1)
+    housing_prices_df.sort_values(by='yr_renovated')
+    ren_housing_prices = housing_prices_df.sort_values(by='yr_renovated')[housing_prices_df.sort_values(by='yr_renovated')["yr_renovated"]>0]
+    price_housing_prices = ren_housing_prices["price"]
+    yrren_housing_prices = ren_housing_prices["yr_renovated"]
+    #same as previous block but for the other visualisation data 
+    housing_prices_df['price'] = housing_prices_df.apply(lambda row: replace_with_bath_avg_price(row['bathrooms'], row['price']), axis=1)
+    housing_prices_df.sort_values(by='bathrooms')
+    bath_housing_prices = housing_prices_df.sort_values(by='bathrooms')[housing_prices_df.sort_values(by='bathrooms')["bathrooms"]>0]
+    bath_price = bath_housing_prices["price"]
+    bathrooms_housing_prices = bath_housing_prices["bathrooms"]
     #plotting the first visualisation 
     fig, ax = plt.subplots()
     fig.suptitle("Price to year renovated", fontsize=16)
     ax.set_xlabel("Year renovated", fontsize=12)
     ax.set_ylabel("Price (Millions)", fontsize=12)
-    ax.plot(row_renovated_bef1970, row_renovated_bef1970_price)
+    ax.plot(yrren_housing_prices,price_housing_prices)
+    ax.grid(True)
+    plt.show()
+    #plotting the second visualisation 
+    fig, ax = plt.subplots()
+    fig.suptitle("Price to bathrooms", fontsize=16)
+    ax.set_xlabel("Bathrooms", fontsize=12)
+    ax.set_ylabel("Price (Millions)", fontsize=12)
+    ax.plot(bathrooms_housing_prices, bath_price)
     ax.grid(True)
     plt.show()
 
