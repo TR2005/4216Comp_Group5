@@ -68,6 +68,7 @@ def option_tomos():
         for row in csv_reader:
             # Checking if the number of floors in a house is in the list or not then adding it to the relevant array element
             # and adding a 1 to the house number to be able to calcualte average
+            Price = float(row[1])
             if row[6] in HouseFloorNumber:
                 # Finding the location of the match and setting it as a Location to be able to edit the other lists
                 Location = HouseFloorNumber.index(row[6])
@@ -80,7 +81,6 @@ def option_tomos():
                 HouseFloorNumber.append(row[6])
                 HouseFloorAppearance.append(1)
             FullZip = row[16]
-            Price = float(row[1])
             # Removing first 3 letters of the state zipcode
             Zip = FullZip[3:]
             if Zip in Ziplist:
