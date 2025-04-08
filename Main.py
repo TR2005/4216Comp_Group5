@@ -4,7 +4,13 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import matplotlib.patches as mpatches
 import pandas as pd 
+
 print('This is main.py')
+
+#Function to read the dataset so each visualisation can call it and assign it to a variable
+def load_dataset():
+    return pd.read_csv("USA Housing Dataset.csv")#
+  
 def option_print_dataset():
     print("You selected Print Dataset.")
     #runs through the dataset and prints it
@@ -15,9 +21,11 @@ def option_print_dataset():
         next(csv_reader)
         for row in csv_reader:
             print(row)
+
 def option_visualisations():
     print("You selected Visualisations.")
     user_selection()
+
 def option_questions():
     print("You selected questions\n Please enter a user")
     while True: 
@@ -28,15 +36,13 @@ def option_questions():
         elif choice == "2":
           print(f"-Comparison between the price of a house and whether its renovated/what date it was renovated \n-how the ammount of bathrooms affects the price of the house and what the average price of 1 bathroom is")
         elif choice == "3":
-            print(f"-comparison between the condition of the house and what year it was built and wether it needed renevating or not and how that corrilates to the condition.\n-comparioson between the total sqft and how that corrilates to the number of rooms and the price of the property.")
+            print(f"1. Comparing house prices between different cities\n2. Comparing house prices over time.")
         elif choice == "4":
             print(f"-Comparing house prices over time\n-Comparing house prices between different cities")
         elif choice == "5":
-            main()
+            return
         else:
             print("Invalid choice, please choose a number between 1 and 5.")
-
-
 
 def option_tomos():
     print("you selected user: Tomos")
@@ -164,8 +170,19 @@ def option_tomos():
     black= mpatches.Patch(color='black', label='2000k+')
     plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.2), ncol=4, handles=[green, red, blue, purple, pink, orange, brown, gray, olive, cyan, black])
     plt.show()
+
 def option_reece():
+    housing_prices = load_dataset()
     print("you selected user: Reece")
+    #only getting the rows which have renovations 
+    unsorted_renovated_true = housing_prices[housing_prices["yr_renovated"]>0]
+    #sorting and removing dupes on the rows needed for the visualisation
+    renovated_true_sorted = unsorted_renovated_true.sort_values(by="yr_renovated")
+    renovated_true_nodupe = renovated_true_sorted.drop_duplicates("yr_renovated")
+    #turning the sorted tables into individual lists with the needed rows for plotting 
+    row_renovated_bef1970_price = renovated_true_nodupe["price"]
+    row_renovated_bef1970 = renovated_true_nodupe["yr_renovated"]
+    
     housing_prices = pd.read_csv("USA Housing Dataset.csv")
     housing_prices_df = pd.DataFrame(housing_prices)
     #determine duplicates and also their respective averages 
@@ -196,6 +213,7 @@ def option_reece():
     bath_housing_prices = housing_prices_df.sort_values(by='bathrooms')[housing_prices_df.sort_values(by='bathrooms')["bathrooms"]>0]
     bath_price = bath_housing_prices["price"]
     bathrooms_housing_prices = bath_housing_prices["bathrooms"]
+
     #plotting the first visualisation 
     fig, ax = plt.subplots()
     fig.suptitle("Price to year renovated", fontsize=16)
@@ -213,13 +231,143 @@ def option_reece():
     ax.grid(True)
     plt.show()
 
+#Set bar colour conditions for city prices visualisation
+def bar_colour(price):
+    if price <300000:
+        return "green"
+    elif price >=300000 and price < 800000:
+        return "orange"
+    else:
+        return "red"
+    
+def oliver_visualisation1():
+    data = load_dataset()
+    print("you selected user: Oliver")
+    
+    #Group dataset by city
+    data_grouped = data.groupby("city")["price"].mean()
+
+    #Assign bars colours based on price
+    colours = [bar_colour(p) for p in data_grouped]
+
+    #Create the plot
+    fig, ax = plt.subplots(figsize = (13, 6))
+    ax.bar(data_grouped.index, data_grouped, color = colours)
+       
+    #Create different legend patches for the different prices
+    green_patch = mpatches.Patch(color="green", label="Affordable Place To Live (average under $300000)")
+    #r means the label is a raw string so no syntax error for escape character
+    orange_patch = mpatches.Patch(color="orange", label=r"Average Cost Place To Live (average between \$300000 and \$800000)")
+    red_patch = mpatches.Patch(color="red", label="Expensive Place To Live (Average over $800000)")
+
+    ax.legend(handles=[green_patch, orange_patch,red_patch])
+
+    #Labels and title
+    ax.set_xlabel("City")
+    ax.set_ylabel("Average Price ($)")
+    ax.set_title("House Price Comparison Between Cities")
+
+    #Rotate labels and add lines on y axis
+    ax.set_xticklabels(data_grouped.index, rotation=90, fontsize = 9)
+    ax.yaxis.grid(True)
+
+    #Stop the graph using scientific notation
+    plt.ticklabel_format(style = 'plain', axis = "y")
+
+    #Make sure all labels are visible in the graph
+    plt.tight_layout()
+
+    #Show the graph
+    plt.show()
+
+def oliver_visualisation2():
+    data = load_dataset()
+    #Convert date column to correct format
+    data["date"] = pd.to_datetime(data["date"])
+
+    while True:
+        print(f" === House Price Trend Options === \n1. View overall house price change over time\n2. Compare house prices over time between 2 ZIP codes\n3. Return to previous menu")
+        choice = input()
+
+        if choice == "1":
+            #Sort the dataset by date
+            data = data.sort_values(by = "date")
+
+            #Group the data by day and calculate average price
+            data_grouped = data.groupby(data["date"].dt.date)["price"].mean()
+
+            #Create the plot
+            fig, ax = plt.subplots(figsize=(12, 6))
+            ax.plot(data_grouped.index, data_grouped)
+
+             #Labels and title
+            ax.set_xlabel("Date")
+            ax.set_ylabel("Average Price ($)")
+            ax.set_title("House Price Trends Over Time")
+
+            #Stop the graph using scientific notation
+            plt.ticklabel_format(style = 'plain', axis = "y")
+
+            #Show the graph
+            plt.grid(True)
+            plt.show()
+
+        elif choice == "2":
+            zip1 = input("Enter the first ZIP code: ")
+            zip2 = input("Enter the second ZIP code: ")
+
+            #Filters the dataset to only have the right statezip in the variables
+            zip1_data = data[data["statezip"] == zip1]
+            zip2_data = data[data["statezip"] == zip2]
+
+            #Groups the data by date to get an average price for each zip
+            zip1_grouped = zip1_data.groupby(zip1_data["date"].dt.date)["price"].mean()
+            zip2_grouped = zip2_data.groupby(zip2_data["date"].dt.date)["price"].mean()
+
+             #Create the plots
+            fig, ax = plt.subplots(figsize=(12, 6))
+            ax.plot(zip1_grouped.index, zip1_grouped, label=zip1)
+            ax.plot(zip2_grouped.index, zip2_grouped, label=zip2)
+
+             #Labels and title
+            ax.set_xlabel("Date")
+            ax.set_ylabel("Average Price ($)")
+            ax.set_title("House Price Trends Over Time: " +zip1+ " vs " +zip2)
+            ax.legend()
+
+            #Stop the graph using scientific notation
+            plt.ticklabel_format(style = 'plain', axis = "y")
+
+            #Show the graph
+            plt.grid(True)
+            plt.show()
+
+        elif choice == "3":
+            break
+
+        else:
+            print("Invalid choice, please choose a number between 1 and 3")
 
 def option_oliver():
-    print("you selected user: Oliver")
-    # place your visualisation code here please. @oliver9362
+    print("You selected user: Oliver")
+    while True:
+        print(f"=== Oliver's Visualisations ===\n1. City Price Comparison\n2. Prices Over Time\n3. Return to previous menu")
+        choice = input()
+
+        if choice == "1":
+            oliver_visualisation1()
+        elif choice == "2":
+            oliver_visualisation2()
+        elif choice == "3":
+            print("Returning to previous menu.")
+            break
+        else:
+            print("Invalid choice, please choose a number between 1 and 3.")
+
 def option_sam():
     print("you selected user: Sam")
     #place your visualisations code here sam
+
 def main():
     while True:
         #main menu to be showed whenever the program opens 
@@ -236,6 +384,7 @@ def main():
             break
         else:
             print("Invalid choice, please choose a number between 1 and 4.")
+
 def user_selection():
      while True: 
         print(f" === Select a user. === \n1. Tomos\n2. Reece\n3. Oliver\n4. Sam\n5. Return to main  menu\n================\nEnter your choice (1-5): ")
@@ -249,7 +398,7 @@ def user_selection():
         elif choice == "4":
             option_sam()
         elif choice == "5":
-            main()
+            return
         else:
             print("Invalid choice, please choose a number between 1 and 5.")
 main()
