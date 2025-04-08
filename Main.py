@@ -98,6 +98,12 @@ def option_tomos():
         i += 1
     #sorting floor numbers while also keeping the price in the same location as the floor number
     HouseFloorNumber, AvgPricePerFloor = zip(*sorted(zip(HouseFloorNumber, AvgPricePerFloor)))
+    # Making bar graph for Average floor price
+    plt.bar (HouseFloorNumber, AvgPricePerFloor)
+    plt.xlabel("Amount of floors")
+    plt.ylabel("Price per floor")
+    plt.xticks(HouseFloorNumber)
+    plt.show()
     i=0
     #dividing all items in Price list with Apperance list to get the average house price for each zipcode
     for item in Appearancelist:
@@ -129,23 +135,6 @@ def option_tomos():
         else:
             Colour.append('black')
         i += 1
-    green = mpatches.Patch(color='green', label='<200k')
-    red = mpatches.Patch(color='red', label='200k-400k')
-    blue = mpatches.Patch(color='blue', label='400k-600k')
-    purple= mpatches.Patch(color='purple', label='600k-800k')
-    pink= mpatches.Patch(color='pink', label='800k-1000k')
-    orange= mpatches.Patch(color='orange', label='1000k-1200k')
-    brown= mpatches.Patch(color='brown', label='1200k-1400k')
-    gray= mpatches.Patch(color='gray', label='1400k-1600k')
-    olive= mpatches.Patch(color='olive', label='1600k-1800k')
-    cyan= mpatches.Patch(color='cyan', label='1800k-2000k')
-    black= mpatches.Patch(color='black', label='2000k+')
-    # Making bar graph for Average floor price
-    plt.bar (HouseFloorNumber, AvgPricePerFloor)
-    plt.xlabel("Amount of floors")
-    plt.ylabel("Price per floor")
-    plt.xticks(HouseFloorNumber)
-    plt.show()
     # Making scatter graph to show location and colour price of different zipcodes
     x = Longitude
     y = Latitude
@@ -162,6 +151,17 @@ def option_tomos():
     plt.scatter(x,y, c=Colour)
     plt.xlabel("Longitude")
     plt.ylabel("Latitude")
+    green = mpatches.Patch(color='green', label='<200k')
+    red = mpatches.Patch(color='red', label='200k-400k')
+    blue = mpatches.Patch(color='blue', label='400k-600k')
+    purple= mpatches.Patch(color='purple', label='600k-800k')
+    pink= mpatches.Patch(color='pink', label='800k-1000k')
+    orange= mpatches.Patch(color='orange', label='1000k-1200k')
+    brown= mpatches.Patch(color='brown', label='1200k-1400k')
+    gray= mpatches.Patch(color='gray', label='1400k-1600k')
+    olive= mpatches.Patch(color='olive', label='1600k-1800k')
+    cyan= mpatches.Patch(color='cyan', label='1800k-2000k')
+    black= mpatches.Patch(color='black', label='2000k+')
     plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.2), ncol=4, handles=[green, red, blue, purple, pink, orange, brown, gray, olive, cyan, black])
     plt.show()
 def option_reece():
