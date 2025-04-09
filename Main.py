@@ -3,7 +3,7 @@ import pgeocode
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import matplotlib.patches as mpatches
-import pandas as pd 
+import pandas as pd
 
 print('This is main.py')
 
@@ -244,7 +244,7 @@ def oliver_visualisation1():
     data = load_dataset()
     print("you selected user: Oliver")
     
-    #Group dataset by city
+    #Group dataset by city and calculate mean
     data_grouped = data.groupby("city")["price"].mean()
 
     #Assign bars colours based on price
@@ -324,12 +324,12 @@ def oliver_visualisation2():
             zip1_grouped = zip1_data.groupby(zip1_data["date"].dt.date)["price"].mean()
             zip2_grouped = zip2_data.groupby(zip2_data["date"].dt.date)["price"].mean()
 
-             #Create the plots
+            #Create the plots
             fig, ax = plt.subplots(figsize=(12, 6))
             ax.plot(zip1_grouped.index, zip1_grouped, label=zip1)
             ax.plot(zip2_grouped.index, zip2_grouped, label=zip2)
 
-             #Labels and title
+            #Labels and title
             ax.set_xlabel("Date")
             ax.set_ylabel("Average Price ($)")
             ax.set_title("House Price Trends Over Time: " +zip1+ " vs " +zip2)
@@ -348,6 +348,7 @@ def oliver_visualisation2():
         else:
             print("Invalid choice, please choose a number between 1 and 3")
 
+#Menu to allow user to select which visualisation to see
 def option_oliver():
     print("You selected user: Oliver")
     while True:
