@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import matplotlib.patches as mpatches
 import pandas as pd
+import numpty as np
 
 print('This is main.py')
 
@@ -366,8 +367,48 @@ def option_oliver():
             print("Invalid choice, please choose a number between 1 and 3.")
 
 def option_sam():
-    print("you selected user: Sam")
-    #place your visualisations code here sam
+    print("You selected user: Sam")
+    while True:
+        print(f" === Sam's Visualisations ===\n1. Visualization 1\n2. Visualization 2\n3. Return")
+        choice = input()  # Taking user input for selecting an option
+
+        if choice == "1":
+            # Visualization 1
+            print("Displaying Sam's Visualization 1")
+
+            # Load dataset
+            data = load_dataset()
+
+            # Create 10-year incriment bins from 1900 to 2020
+            bins = list(range(1900, 2030, 10))
+            labels = [f"{bins[i]}-{bins[i+1]}" for i in range(len(bins)-1)]
+            data["year_bin"] = pd.cut(data["yr_built"], bins=bins, labels=labels, right=False)
+
+            # Calculate average condition per bin
+            avg_conditions = data.groupby("year_bin")["condition"].mean().reset_index()
+
+            # Plotting
+            plt.figure(figsize=(12, 6))
+            plt.bar(avg_conditions["year_bin"], avg_conditions["condition"], color='skyblue')
+            plt.xlabel("Year Built")
+            plt.ylabel("Average Condition")
+            plt.title("Average House Condition by Year Built")
+            plt.ylim(1, 5)
+            plt.xticks(rotation=45)
+            plt.grid(axis='y')
+            plt.tight_layout()
+            plt.show()
+
+        elif choice == "2":
+            # Visualization is empty for now
+            print("Visualization 2 is empty.")
+
+        elif choice == "3":
+            print("Returning.")
+            break  # Exit the loop and return to the previous page
+
+        else:
+            print("Invalid choice, please choose a number between 1 and 3.")
 
 def main():
     while True:
