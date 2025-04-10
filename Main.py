@@ -367,8 +367,8 @@ def option_oliver():
             print("Invalid choice, please choose a number between 1 and 3.")
 
 def option_sam():
-    print("You selected user: Sam")
-    while True:
+     print("You selected user: Sam")
+     while True:
         print(f" === Sam's Visualisations ===\n1. Visualization 1\n2. Visualization 2\n3. Return")
         choice = input()  # Taking user input for selecting an option
 
@@ -379,7 +379,7 @@ def option_sam():
             # Load dataset
             data = load_dataset()
 
-            # Create 10-year incriment bins from 1900 to 2020
+            # Create 10-year increment bins from 1900 to 2020
             bins = list(range(1900, 2030, 10))
             labels = [f"{bins[i]}-{bins[i+1]}" for i in range(len(bins)-1)]
             data["year_bin"] = pd.cut(data["yr_built"], bins=bins, labels=labels, right=False)
@@ -400,12 +400,38 @@ def option_sam():
             plt.show()
 
         elif choice == "2":
-            # Visualization is empty for now
-            print("Visualization 2 is empty.")
+            # Visualization 2: Average Bedrooms by Price Range
+            print("Displaying Sam's Visualization 2")
+
+            # Load and filter dataset
+            data = load_dataset()
+
+            # Define price ranges (excluding the first range 0-100k)
+            price_bins = [100000, 200000, 300000, 400000, 500000, 600000, 700000, 800000, 900000, 1000000]
+            price_labels = ["100k-200k", "200k-300k", "300k-400k", "400k-500k", "500k-600k", "600k-700k", 
+                            "700k-800k", "800k-900k", "900k-1M"]
+
+            # Categorize houses by price range
+            data["price_range"] = pd.cut(data["price"], bins=price_bins, labels=price_labels, right=False)
+
+            # Calculate average number of bedrooms for each price range
+            avg_bedrooms_by_price = data.groupby("price_range")["bedrooms"].mean().reset_index()
+
+            # Plotting
+            plt.figure(figsize=(12, 6))
+            plt.plot(avg_bedrooms_by_price["price_range"], avg_bedrooms_by_price["bedrooms"], marker='o', linestyle='-', color='green')
+            plt.xlabel("Price Range ($)")
+            plt.ylabel("Average Number of Bedrooms")
+            plt.title("Average Number of Bedrooms by Price Range")
+            plt.xticks(rotation=45)
+            plt.yticks([1, 2, 3, 4, 5])  # Set y-axis ticks to just 1, 2, 3, 4, 5
+            plt.grid(True)
+            plt.tight_layout()
+            plt.show()
 
         elif choice == "3":
             print("Returning.")
-            break  # Exit the loop and return to the previous page
+            break
 
         else:
             print("Invalid choice, please choose a number between 1 and 3.")
