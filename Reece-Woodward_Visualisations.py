@@ -15,15 +15,7 @@ def load_dataset():
 
 
 housing_prices = load_dataset()
-   
-#only getting the rows which have renovations 
-unsorted_renovated_true = housing_prices[housing_prices["yr_renovated"]>0]
-#sorting and removing dupes on the rows needed for the visualisation
-renovated_true_sorted = unsorted_renovated_true.sort_values(by="yr_renovated")
-renovated_true_nodupe = renovated_true_sorted.drop_duplicates("yr_renovated")
-#turning the sorted tables into individual lists with the needed rows for plotting 
-row_renovated_bef1970_price = renovated_true_nodupe["price"]
-row_renovated_bef1970 = renovated_true_nodupe["yr_renovated"]
+
     
 housing_prices = pd.read_csv("USA Housing Dataset.csv")
 housing_prices_df = pd.DataFrame(housing_prices)
