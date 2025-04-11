@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import matplotlib.patches as mpatches
 import pandas as pd
-import numpty as np
 
 print('This is main.py')
 
@@ -39,7 +38,7 @@ def option_questions():
         elif choice == "3":
             print(f"1. Comparing house prices between different cities\n2. Comparing house prices over time.")
         elif choice == "4":
-            print(f"-comparison between the condition of the house and what year it was built and wether it needed renevating or not and how that corrilates to the condition.\n-comparioson between the total sqft and how that corrilates to the number of rooms and the price of the property.)
+            print(f"-comparison between the condition of the house and what year it was built and wether it needed renevating or not and how that corrilates to the condition.\n-comparioson between the total sqft and how that corrilates to the number of rooms and the price of the property.")
         elif choice == "5":
             return
         else:
