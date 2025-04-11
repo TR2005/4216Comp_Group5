@@ -13,5 +13,11 @@ pip install pandas
 pip install pgeocode
 
 4.Run the Main.py file. You will be presented with a main menu and from there you can navigate through the program.
+    When you run the code you will be greeted by a main menu giving you 5 choices you should input the number at the start of the line for the option you wish to select with no additinal keys entered which will then call the function required
+
+    Choosing print dataset should print the entire database at once for free viewing.
+
+    if you selected questions you should be met by a similar menu and should repeat the previous step to select the option you want which should print text and when you are done press 5 to go back to main menu
+
+    if you selected visualisation it is the same as the steps above to select a user and then to select their individual visualisations which should then display a generated graph based on what option was selected.
 ---
-To find the main visualisations, press 2 on the main menu and then select the team member whose visualisations you would like to see.
